@@ -1,12 +1,191 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello World</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Git Context</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 20px;
+    background: #101114;
+    color: #eee;
+    font-family: system-ui, sans-serif;
+  }
+  .card {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    border: 1px solid #303238;
+    border-radius: 16px;
+    background: #191a20;
+  }
+  h3 { margin: 0 0 14px; font-size: 17px; }
+  .prompt-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #25262d;
+    border: 1px solid #383a43;
+    border-radius: 10px;
+  }
+  .prompt-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: #c9cad2;
+    font-size: 14px;
+  }
+  button {
+    flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    display: grid;
+    place-items: center;
+    border: 0;
+    border-radius: 8px;
+    background: #41434d;
+    color: white;
+    cursor: pointer;
+  }
+  button:active { background: #626574; }
+  button svg { width: 19px; height: 19px; }
+  #status {
+    min-height: 18px;
+    margin-top: 10px;
+    color: #86d9a0;
+    font-size: 12px;
+  }
+  .hint { color: #777b87; font-size: 12px; margin-top: 8px; }
+</style>
 </head>
 <body>
-  <h1>Hello World!</h1>
-  <p>My first webpage 🚀</p>
+<main class="card">
+  <h3>GitHub Project Context</h3>
+
+  <div class="prompt-row">
+    <div class="prompt-text" id="preview"></div>
+    <button id="copy" aria-label="Copy full prompt" title="Copy full prompt">
+      <svg id="icon" viewBox="0 0 24 24" fill="none"
+           stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" stroke-linejoin="round">
+        <rect x="8" y="8" width="13" height="13" rx="2"/>
+        <path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/>
+      </svg>
+    </button>
+  </div>
+
+  <div id="status"></div>
+  <div class="hint">Tap icon to copy the complete context for another AI.</div>
+</main>
+
+<script>
+const prompt = `# GitHub Project Context — mythoughts2026
+
+## Repository
+- GitHub username: thanhtoan0306
+- Repository: mythoughts2026
+- URL: https://github.com/thanhtoan0306/mythoughts2026
+- Remote: origin
+- Remote URL: https://github.com/thanhtoan0306/mythoughts2026.git
+- Local directory: ~/mythoughts2026
+- Branch: master
+- Initial file: index.html
+- Intended GitHub Pages URL: https://thanhtoan0306.github.io/mythoughts2026/
+
+## Git identity
+- Name: thanh toan
+- Email: thanhtoan0306@gmail.com
+
+Configured with:
+git config --global user.name "thanh toan"
+git config --global user.email "thanhtoan0306@gmail.com"
+
+## Environment
+- Device: Android
+- Terminal: Termux
+- Git and GitHub CLI (gh)
+- GitHub authentication via gh auth login
+- Repository already cloned locally.
+
+## Standard workflow
+cd ~/mythoughts2026
+
+Check status:
+git status
+git branch --show-current
+git remote -v
+
+Commit and push changes:
+git add .
+git commit -m "Describe your changes"
+git push origin master
+
+If upstream is not configured:
+git push -u origin master
+
+## Troubleshooting
+Git identity:
+git config --global user.name "thanh toan"
+git config --global user.email "thanhtoan0306@gmail.com"
+
+GitHub authentication:
+gh auth status
+gh auth login
+
+Check repository:
+gh repo view thanhtoan0306/mythoughts2026
+
+## GitHub Pages
+- Source branch: master
+- Source folder: /
+- Entry point: index.html
+
+Check Pages:
+gh api repos/thanhtoan0306/mythoughts2026/pages
+
+Intended website:
+https://thanhtoan0306.github.io/mythoughts2026/
+
+The repository was initially created as private. GitHub Free generally requires a public repository for Pages. Verify visibility and deployment status before assuming the site is live.
+
+## Instructions for the next AI
+1. Continue using the existing repository. Never create another repo unnecessarily.
+2. Do not change remote URL or branch without asking.
+3. Assume editing happens in Termux unless told otherwise.
+4. When creating or modifying pages, provide complete runnable HTML/CSS/JavaScript.
+5. Prefer lightweight, self-contained HTML projects without unnecessary frameworks or backend.
+6. After editing, provide exact Git commands to commit and push.
+7. Never claim a change was pushed or deployed unless it actually succeeded.
+8. Keep commands copy-paste friendly for mobile terminal.`;
+
+document.getElementById("preview").textContent =
+  prompt.replace(/\s+/g, " ").trim();
+
+document.getElementById("copy").addEventListener("click", async () => {
+  const status = document.getElementById("status");
+  try {
+    await navigator.clipboard.writeText(prompt);
+    status.textContent = "✓ Copied full prompt!";
+  } catch (err) {
+    const area = document.createElement("textarea");
+    area.value = prompt;
+    document.body.appendChild(area);
+    area.select();
+    const success = document.execCommand("copy");
+    area.remove();
+    status.textContent = success
+      ? "✓ Copied full prompt!"
+      : "Copy failed. Please try again.";
+  }
+});
+</script>
 </body>
 </html>
